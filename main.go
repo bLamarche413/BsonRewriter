@@ -321,7 +321,7 @@ func (rw *bsonRewriter) handleBsonDArray(typedN *ast.CompositeLit) (ast.Node, re
 	for _, item := range typedN.Elts {
 
 		switch typedElt := item.(type) {
-		// bson.D's
+
 		case *ast.CompositeLit:
 			bsonD, _ := rw.handleBsonD(typedElt)
 			bsonDCast := bsonD.(ast.Expr)
@@ -330,7 +330,6 @@ func (rw *bsonRewriter) handleBsonDArray(typedN *ast.CompositeLit) (ast.Node, re
 				args = append(args, replace)
 			}
 
-		// error cases
 		case *ast.KeyValueExpr:
 			fmt.Println("WARNING: Bson.D Array Elts contained naked k:v pair")
 
@@ -411,7 +410,7 @@ func rewriteFile(filename string) {
 	newNode := rewriter.Rewrite(rw, node)
 
 	// add import
-	// if the imports arent perfect, replace.sh call's goimports
+	// if the imports arent perfect, replace.sh calls goimports and will fix it up!
 	_ = astutil.AddImport(fset, node, "github.com/10gen/sqlproxy/internal/util/bsonutil")
 
 	// print it back out
